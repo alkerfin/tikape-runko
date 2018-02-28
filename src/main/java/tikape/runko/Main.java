@@ -16,7 +16,7 @@ public class Main {
 
         annosDao annosD = new annosDao(database);
         raakaaineDao raakaaineD = new raakaaineDao(database);
-        
+
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("viesti", "jaa");
@@ -28,7 +28,7 @@ public class Main {
         get("/raaka-aineet",(req,res) -> {
 
         },new ThymeleafTemplateEngine());
-
+*/
         //Listaa annokset
         get("/annokset",(req,res) -> {
           HashMap map = new HashMap<>();
@@ -40,7 +40,7 @@ public class Main {
         //Hae annos
         get("/annos/:id",(req,res) -> {
           HashMap map = new HashMap<>();
-          map.put("annos",annosD.findOne(Integer.parseInt(req.params["id"])));
+          map.put("annos",annosD.findOne(Integer.parseInt(req.params("id"))));
 
           return new ModelAndView(map, "annos");
 
@@ -49,11 +49,11 @@ public class Main {
         //Hae raaka-aine
         get("/raaka-aine/:id",(req,res) -> {
           HashMap map = new HashMap<>();
-          map.put("raaka-aine",raakaaineD.findOne(Integer.parseInt(req.params["id"])));
+          map.put("raaka-aine",raakaaineD.findOne(Integer.parseInt(req.params("id"))));
 
           return new ModelAndView(map, "annos");
 
-        },new ThymeleafTemplateEngine());*/
+        },new ThymeleafTemplateEngine());
 /*
         //Poista raaka-aine
         post("/delete/raaka-aine/:id",(req,res) -> {

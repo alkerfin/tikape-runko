@@ -17,10 +17,61 @@ public class Main {
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("viesti", "tervehdys");
+            map.put("viesti", "jaa");
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
+
+        //Listaa raaka-aineet
+        get("/raaka-aineet",(req,res) -> {
+
+        },new ThymeleafTemplateEngine());
+
+        //Listaa annokset
+        get("/annokset",(req,res) -> {
+
+        },new ThymeleafTemplateEngine());
+
+        //Hae annos
+        get("/annos/:id",(req,res) -> {
+
+        },new ThymeleafTemplateEngine());
+
+        //Hae raaka-aine
+        get("/raaka-aine/:id",(req,res) -> {
+
+        },new ThymeleafTemplateEngine());
+
+        //Poista raaka-aine
+        post("/delete/raaka-aine/:id",(req,res) -> {
+
+        },json());
+
+        //Poista annos
+        post("/delete/annos/:id",(req,res) -> {
+
+        },json());
+
+        //Muokkaa raaka-ainetta
+        post("/edit/raaka-aine/:id",(req,res) -> {
+
+        },json());
+
+        //Lisää raaka-aine
+        post("/edit/annos/:id",(req,res) -> {
+
+        },json());
+
+        //Lisää annos
+        post("/edit/annos/:id",(req,res) -> {
+
+        },json());
+
+        //Muokkaa annosta
+        post("/edit/annos/:id",(req,res) -> {
+
+        },json());
+
 
         get("/opiskelijat", (req, res) -> {
             HashMap map = new HashMap<>();

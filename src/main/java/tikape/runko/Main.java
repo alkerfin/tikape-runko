@@ -30,14 +30,16 @@ public class Main {
         },new ThymeleafTemplateEngine());
 */
         //Listaa annokset
+        //Done?
         get("/annokset",(req,res) -> {
           HashMap map = new HashMap<>();
           map.put("annokset",annosD.findAll());
+          map.put("aineet",raakaineD.findAll());
 
           return new ModelAndView(map,"annokset");
         },new ThymeleafTemplateEngine());
 
-        
+
 
         //Hae annos
         get("/annos/:id",(req,res) -> {
@@ -48,31 +50,19 @@ public class Main {
 
         },new ThymeleafTemplateEngine());
 
-        //Hae raaka-aine
-        get("/raaka-aine/:id",(req,res) -> {
-          HashMap map = new HashMap<>();
-          map.put("raaka-aine",raakaaineD.findOne(Integer.parseInt(req.params("id"))));
-
-          return new ModelAndView(map, "raakaaine");
-        },new ThymeleafTemplateEngine());
 
         //Poista raaka-aine
         post("/delete/raaka-aine/:id",(req,res) -> {
            raakaaineD.delete(Integer.parseInt(req.params("id")));
-           return false;
+           res.redirect("/raaka-aineet");
         });
 
         //Poista annos
         post("/delete/annos/:id",(req,res) -> {
           annosD.delete(Integer.parseInt(req.params("id")));
-          return false;
+          res.redirect("/annokset");
         });
 
-        //Muokkaa raaka-ainetta
-        post("/edit/raaka-aine/:id",(req,res) -> {
-          String nimi = req.queryParams("nimi");
-          return false;
-        });
 
         //Lisää raaka-aine
         post("/add/raaka-aine/:id",(req,res) -> {
@@ -86,10 +76,6 @@ public class Main {
           return false;
         });
 
-        //Muokkaa annosta
-        post("/edit/annos/:id",(req,res) -> {
-          return false;
-        });
 
 /*
         get("/opiskelijat", (req, res) -> {

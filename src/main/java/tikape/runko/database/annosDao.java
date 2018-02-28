@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import tikape.runko.domain.Annos;
+import tikape.runko.domain.Raakaaine;
 
 public class annosDao implements Dao<Annos, Integer> {
 
@@ -19,6 +20,15 @@ public class annosDao implements Dao<Annos, Integer> {
 
     public annosDao(Database database) {
         this.database = database;
+    }
+
+    public void add(String nimi) {
+      Connection connection = database.getConnection();
+      PreparedStatement stmt = connection.prepareStatement("INSERT INTO annos (nimi) value(?)");
+      stmt.setObject(1, nimi);
+
+      stmt.executeQuery();
+
     }
 
     @Override
@@ -37,6 +47,26 @@ public class annosDao implements Dao<Annos, Integer> {
         String nimi = rs.getString("nimi");
 
         Annos a = new Annos(id, nimi);
+        stmt = connection.prepareStatement("SELECT * FROM dbo.annosraakaaine WHERE annos_id = ?");
+        stmt.setObject(1, key);
+
+        rs = stmt.executeQuery();
+
+        List<Raakaaine> aineet = new ArrayList<>();
+        while (rs.next()) {
+            stmt = connection.prepareStatement("SELECT * FROM raakaaine WHERE id = ?");
+            stmt.setObject(1,rs.getInt("raakaaine_id"));
+            ResultSet rs2 = stmt.executeQuery();
+            if(!rs2.next()) {
+              continue;
+            }
+            Integer r_id = rs2.getInt("id");
+            String r_nimi = rs2.getString("nimi");
+
+            aineet.add(new Raakaaine(r_id, r_nimi));
+        }
+
+        a.addAineet(aineet);
 
         rs.close();
         stmt.close();
@@ -44,6 +74,7 @@ public class annosDao implements Dao<Annos, Integer> {
 
         return a;
     }
+
 
     @Override
     public List<Annos> findAll() throws SQLException {

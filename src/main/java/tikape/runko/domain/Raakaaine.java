@@ -4,6 +4,8 @@ public class Raakaaine {
 
     private Integer id;
     private String nimi;
+    private String ohje;
+    private String maara;
 
     public Raakaaine(Integer id, String nimi) {
         this.id = id;
@@ -12,6 +14,22 @@ public class Raakaaine {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setMaara(String maara) {
+      this.maara = maara;
+    }
+
+    public void setOhje(String ohje) {
+      this.ohje = ohje;
+    }
+
+    public String getOhje() {
+      return this.ohje;
+    }
+
+    public String getMaara() {
+      return this.maara;
     }
 
     public void setId(Integer id) {

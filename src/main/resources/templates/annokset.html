@@ -23,12 +23,12 @@
         <form method="POST" action="/add/linkki">
           <h2>Lisää raaka-aineita</h2>
           <p>Annoksen nimi</p>
-          <select name="annos" th:each="annos: ${annokset}">
-            <option value="${annos.id}"><span th:text="${annos.nimi}"></span></option>
+          <select name="annos">
+            <option  th:each="annos: ${annokset}" th:value="${annos.id}"><span th:text="${annos.nimi}"></span></option>
           </select><br/>
           <p>Lisättävä raaka-aine</p>
-          <select name="raaka-aine" th:each="aine: ${ainekset}">
-            <option value="${aine.id}"><span th:text="${aine.nimi}"></span></option>
+          <select name="raaka-aine">
+            <option th:each="aine: ${aineet}" th:value="${aine.id}"><span th:text="${aine.nimi}"></span></option>
           </select><br/>
           <p>Järjestys</p>
           <input type="text" name="jarjestys"/><br/>
@@ -40,7 +40,7 @@
 
         </form>
         <ul>
-          <li>Annoslistaukseen</li>
+          <li><a href="/">Annoslistaukseen</a></li>
         </ul>
     </body>
 </html>

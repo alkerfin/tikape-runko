@@ -22,19 +22,19 @@ public class annosDao implements Dao<Annos, Integer> {
         this.database = database;
     }
 
-    public void add(String nimi) {
+    @Override
+    public void add(String nimi) throws SQLException {
       Connection connection = database.getConnection();
-      PreparedStatement stmt = connection.prepareStatement("INSERT INTO annos (nimi) value(?)");
+      PreparedStatement stmt = connection.prepareStatement("INSERT INTO annos (nimi) values (?)");
       stmt.setObject(1, nimi);
 
-      stmt.executeQuery();
-
+      stmt.execute();
     }
 
     @Override
     public Annos findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dbo.annos WHERE id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM annos WHERE id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -47,7 +47,7 @@ public class annosDao implements Dao<Annos, Integer> {
         String nimi = rs.getString("nimi");
 
         Annos a = new Annos(id, nimi);
-        stmt = connection.prepareStatement("SELECT * FROM dbo.annosraakaaine WHERE annos_id = ?");
+        stmt = connection.prepareStatement("SELECT * FROM annosraakaaine WHERE annos_id = ? ORDER BY jarjestys");
         stmt.setObject(1, key);
 
         rs = stmt.executeQuery();
@@ -55,15 +55,17 @@ public class annosDao implements Dao<Annos, Integer> {
         List<Raakaaine> aineet = new ArrayList<>();
         while (rs.next()) {
             stmt = connection.prepareStatement("SELECT * FROM raakaaine WHERE id = ?");
-            stmt.setObject(1,rs.getInt("raakaaine_id"));
+            stmt.setObject(1,rs.getInt("raaka_aine_id"));
             ResultSet rs2 = stmt.executeQuery();
             if(!rs2.next()) {
               continue;
             }
             Integer r_id = rs2.getInt("id");
             String r_nimi = rs2.getString("nimi");
-
-            aineet.add(new Raakaaine(r_id, r_nimi));
+            Raakaaine r = new Raakaaine(r_id,r_nimi);
+            r.setMaara(rs.getString("maara"));
+            r.setOhje(rs.getString("ohje"));
+            aineet.add(r);
         }
 
         a.addAineet(aineet);
@@ -80,7 +82,7 @@ public class annosDao implements Dao<Annos, Integer> {
     public List<Annos> findAll() throws SQLException {
 
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dbo.annos");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM annos");
 
         ResultSet rs = stmt.executeQuery();
         List<Annos> annokset = new ArrayList<>();
@@ -99,11 +101,30 @@ public class annosDao implements Dao<Annos, Integer> {
     }
 
     @Override
+    public void addLink(int a,int r,int j,String maara,String ohje) throws SQLException {
+      Connection connection = database.getConnection();
+      PreparedStatement stmt = connection.prepareStatement("INSERT INTO annosraakaaine (raaka_aine_id,annos_id,jarjestys,maara,ohje) values (?,?,?,?,?)");
+      stmt.setObject(1, r);
+      stmt.setObject(2, a);
+      stmt.setObject(3, j);
+      stmt.setObject(4, maara);
+      stmt.setObject(5, ohje);
+
+
+      stmt.execute();
+    }
+
+    @Override
     public void delete(Integer key) throws SQLException {
       Connection connection = database.getConnection();
-      PreparedStatement stmt = connection.prepareStatement("DELETE FROM dbo.annos WHERE id = ?");
+      PreparedStatement stmt = connection.prepareStatement("DELETE FROM annos WHERE id = ?");
       stmt.setObject(1, key);
 
+      stmt.execute();
+      stmt = connection.prepareStatement("DELETE FROM annosraakaaine WHERE annos_id = ?");
+      stmt.setObject(1, key);
+
+      stmt.execute();
 
     }
 

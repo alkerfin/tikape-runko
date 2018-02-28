@@ -23,6 +23,10 @@ public class Annos {
       this.aineet = aineet;
     }
 
+    public List<Raakaaine> getAineet() {
+      return this.aineet;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

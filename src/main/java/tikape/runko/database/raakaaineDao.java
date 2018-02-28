@@ -21,10 +21,21 @@ public class raakaaineDao implements Dao<Raakaaine, Integer> {
         this.database = database;
     }
 
+
+    @Override
+    public void add(String nimi) throws SQLException {
+      Connection connection = database.getConnection();
+      PreparedStatement stmt = connection.prepareStatement("INSERT INTO raakaaine (nimi) values (?)");
+      stmt.setObject(1, nimi);
+
+      stmt.execute();
+
+    }
+
     @Override
     public Raakaaine findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dbo.raakaaine WHERE id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM raakaaine WHERE id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -49,7 +60,7 @@ public class raakaaineDao implements Dao<Raakaaine, Integer> {
     public List<Raakaaine> findAll() throws SQLException {
 
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dbo.raakaaine");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM raakaaine");
 
         ResultSet rs = stmt.executeQuery();
         List<Raakaaine> raakaaineet = new ArrayList<>();
@@ -66,10 +77,16 @@ public class raakaaineDao implements Dao<Raakaaine, Integer> {
 
         return raakaaineet;
     }
-
+    @Override
+    public void addLink(int a,int r,int j,String maara,String ohje) throws SQLException {
+}
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+      Connection connection = database.getConnection();
+      PreparedStatement stmt = connection.prepareStatement("DELETE FROM raakaaine WHERE id = ?");
+      stmt.setObject(1, key);
+
+      stmt.execute();
     }
 
 }

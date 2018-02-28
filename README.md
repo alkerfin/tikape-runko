@@ -1,4 +1,3 @@
-# tikape-runko
+# Yksinkertainen annos-järjestelmä
 
-Tietokantojen perusteet -kurssilla tehtävän web-sovelluksen pohja.
-
+Tällä web-sovelluksella voit lisätä raaka-aineita, lisätä annoksia, poistaa raaka-aineita sekä poistaa annoksia.
